@@ -1,0 +1,37 @@
+.bord {
+
+  
+  border-color: #333333;
+  border-style: bold;
+}
+* {
+font-family: 'Stardos Stencil', cursive;
+}
+
+footer {
+	padding-bottom: 0px;
+}
+
+
+	
+}
+
+
+.icons {
+
+margin-top: 10px;
+margin-left: 100px;
+margin-right: 20px;
+float: right;
+
+}
+
+ page-footer {
+ 	border-top: 3px;
+ 	border-color: black;
+ }
+
+.logoDown {
+	padding-top: 26px;
+}
+
