@@ -1,123 +1,84 @@
 $(document).ready(function() {
-
-console.log("i'm loading")
     //________________________VARIABLES __________
-    var artistArray = [];
-    var playButton = document.getElementById('playButton');
-    var pauseButton = document.getElementById('pauseButton');
-    var previewUrl;
-    var searchValue;
-    var audio;
+    // @TODO: Remove/Refactor Globals
+    let artistArray = [];
+    let playButton = document.getElementById('playButton');
+    let pauseButton = document.getElementById('pauseButton');
+    let previewUrl;
+    let searchValue;
+    let audio;
+    let lastAudio;
 
     //________________________MAIN CODE____________________
     
     // event listener for the event submit
     $('form').on('submit', function(e) {
-
-         $('#playButton').empty();
-         $('#pauseButton').empty();
-
-         searchValue = $("#searchbar").val().trim()
-        console.log(searchValue)
-        getArtistInfo(searchValue);
         e.preventDefault();
-        console.log(e);
+
+        $('#playButton').empty();
+        $('#pauseButton').empty();
+
+        searchValue = $("#searchbar").val().trim()
+        getArtistInfo(searchValue);
 
         //push values of submit to artistsArray
-        var artistSubmit = $('input').val().trim();
+        const artistSubmit = $('input').val().trim();
         artistArray.push(artistSubmit);
-        console.log(artistArray);
 
         createsPlayButton();
         createsPauseButton();
-
     });
 
     //_____________________FUNCTIONS_________________________________
 
-    //Go to Itunes and get the artists
-    function getArtistInfo(artist) {
+//Go to Itunes and get the artists
+function getArtistInfo(artist) {
 
-        console.log(artist);
-        // var performer = $(artist).attr('artists-name');
-        // console.log("this is" + performer);
-        var apiUrl = 'https://itunes.apple.com/search?term=' + artist +
-            "&media=music&country=US&limit=1";
+    var apiUrl = 'https://itunes.apple.com/search?term=' + artist +
+        '&media=music&country=US&limit=1';
 
-        $.ajax({
-            url: apiUrl,
-            method: 'GET',
-            dataType: 'json'
-        }).done(function(response) {
-                console.log(response)
-
-                previewUrl = response.results[0].previewUrl;
-                console.log(previewUrl)
-        
-        }) //AJAX
+    $.ajax({
+        url: apiUrl,
+        method: 'GET',
+        dataType: 'json'
+    }).done(function(response) {
+        previewUrl = response.results[0].previewUrl;
+    }) //AJAX
 } //function get artist info
 
 function createsPlayButton(){
-                 //var div = $("<div>");
-                 var createPlay = $("<button> &#9658 "+  searchValue + "</button>")
-                 createPlay.addClass('createPlay btn-success');
-                 $('#playButton').append(createPlay)         
+  const createPlay = $(`<button> &#9658 ${searchValue}</button>`)
+  createPlay.addClass('createPlay btn-success');
+  $('#playButton').append(createPlay)         
 }
-
-// @TODO: Remove/refactor global
-var lastAudio;
-
-$(document).on('click', ".createPlay", function(e) {
- console.log(e);
- if (lastAudio) {
-    getDomElement(lastAudio).pause();
-    lastAudio.remove();
- }
-
- audio = $("<audio>");
- audio.attr('src', previewUrl);
- console.log(audio.attr('src'));
- getDomElement(audio).play();
-
- lastAudio = audio;
-});
 
 
 function createsPauseButton(){
-     //var div = $("<div>");
-     var createPause = $("<button> &#9724 "+  searchValue + "</button>")
-     createPause.addClass('createPause  btn-danger');
-     $('#pauseButton').append(createPause)         
+   var createPause = $("<button> &#9724 "+  searchValue + "</button>")
+   createPause.addClass('createPause  btn-danger');
+   $('#pauseButton').append(createPause)         
 }
 
-$(document).on('click', ".createPause", function(e) {
+$(document).on('click', '.createPlay', function(e) {
+    e.preventDefault();
+    if (lastAudio) {
+        getDomElement(lastAudio).pause();
+        lastAudio.remove();
+    }
 
- console.log(e);
- 
- console.log(audio.attr('src'));
- getDomElement(audio).pause();
+    audio = $("<audio>");
+    audio.attr('src', previewUrl);
+    console.log(audio.attr('src'));
+    getDomElement(audio).play();
+    
+    lastAudio = audio;
 });
 
+$(document).on('click', ".createPause", function(e) {
+  getDomElement(audio).pause();
+});
 
-//function that creates an audio element 
-/*function createPlayButton() {
-    var playButton = $('.playButton').html('<button class ="playButton"> play </button>');
-    console.log(playButton)
-}*/
-
-//create a function that plays the audio and takes previewUrl as an argument
 function getDomElement(jqueryAudio) {
     return jqueryAudio.get(0);
 }
-
-//function that pauses 
-/*function pauseAudio(jqueryAudio) {
-    return jqueryAudio.get(0);
-}*/
-
 }); //document .ready
-
-
-
-
-

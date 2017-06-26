@@ -5,7 +5,7 @@
     $('.parallax').parallax();
 
   }); // end of document ready
-})(jQuery); // end of jQuery name space
+})($); // end of jQuery name space
 
 
 console.log("Ready!");
